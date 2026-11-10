@@ -34,10 +34,10 @@ li button{background:none;color:#94a3b8;padding:2px 6px}
 <ul id="l"></ul>
 </div>
 <script>
-let D=JSON.parse(localStorage.getItem('exp')||'[]');
+let D=[];try{D=JSON.parse(localStorage.getItem('exp')||'[]')}catch(e){}
 const n=x=>x.toLocaleString('fa-IR');
 function show(){
- localStorage.setItem('exp',JSON.stringify(D));
+ try{localStorage.setItem('exp',JSON.stringify(D))}catch(e){}
  let i=0,o=0;D.forEach(x=>x.k=='in'?i+=x.a:o+=x.a);
  document.getElementById('i').textContent=n(i);document.getElementById('o').textContent=n(o);document.getElementById('b').textContent=n(i-o);
  document.getElementById('l').innerHTML=D.map((x,j)=>`<li><span>${x.t.replace(/</g,'&lt;')}</span><span class="${x.k}">${x.k=='in'?'+':'−'}${n(x.a)} <button onclick="D.splice(${j},1);show()">✕</button></span></li>`).join('');
