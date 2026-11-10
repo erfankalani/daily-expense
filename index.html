@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دخل و خرج من</title>
+<style>
+body{font-family:Tahoma,sans-serif;background:#f1f5f9;margin:0;padding:20px;color:#0f172a}
+.box{max-width:520px;margin:auto;background:#fff;border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+h1{font-size:22px;margin:0 0 12px}
+.sum{display:flex;gap:8px;margin-bottom:14px}
+.sum div{flex:1;background:#f8fafc;border-radius:12px;padding:10px;text-align:center;font-size:13px}
+.sum b{display:block;font-size:17px;margin-top:4px}
+form{display:flex;gap:6px;flex-wrap:wrap}
+input,select,button{font:inherit;padding:9px;border:1px solid #cbd5e1;border-radius:10px}
+input[name=t]{flex:2}input[name=a]{flex:1;min-width:90px}
+button{background:#2563eb;color:#fff;border:0;cursor:pointer}
+ul{list-style:none;padding:0;margin:14px 0 0}
+li{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1px solid #e2e8f0;font-size:14px}
+.in{color:#16a34a}.out{color:#dc2626}
+li button{background:none;color:#94a3b8;padding:2px 6px}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>💰 دخل و خرج من</h1>
+<div class="sum"><div>درآمد<b class="in" id="i">0</b></div><div>هزینه<b class="out" id="o">0</b></div><div>مانده<b id="b">0</b></div></div>
+<form id="f">
+<input name="t" placeholder="عنوان (مثلاً خرید نان)" required>
+<input name="a" type="number" min="1" placeholder="مبلغ (تومان)" required>
+<select name="k"><option value="out">هزینه</option><option value="in">درآمد</option></select>
+<button>افزودن</button>
+</form>
+<ul id="l"></ul>
+</div>
+<script>
+let D=JSON.parse(localStorage.getItem('exp')||'[]');
+const n=x=>x.toLocaleString('fa-IR');
+function show(){
+ localStorage.setItem('exp',JSON.stringify(D));
+ let i=0,o=0;D.forEach(x=>x.k=='in'?i+=x.a:o+=x.a);
+ document.getElementById('i').textContent=n(i);document.getElementById('o').textContent=n(o);document.getElementById('b').textContent=n(i-o);
+ document.getElementById('l').innerHTML=D.map((x,j)=>`<li><span>${x.t.replace(/</g,'&lt;')}</span><span class="${x.k}">${x.k=='in'?'+':'−'}${n(x.a)} <button onclick="D.splice(${j},1);show()">✕</button></span></li>`).join('');
+}
+document.getElementById('f').onsubmit=e=>{e.preventDefault();const f=e.target;D.unshift({t:f.t.value,a:+f.a.value,k:f.k.value});f.reset();show()};
+show();
+</script>
+</body>
+</html>
